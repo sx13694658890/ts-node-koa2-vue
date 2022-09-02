@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./js/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <div>{{number}}
+
+            <input type="text" v-focus="flag"/>
+            <div v-drag.limit="flag"></div>
+            <button @click.stop="handleClick('hello',$event)">点击</button>
+        </div>
+    </div>
+    <script>
+         Vue.directive("focus",{
+            bind(el){
+                
+            },
+            inserted(el,binding){
+                console.log('进门拉了',el,binding)
+                binding.value&& el.focus()
+
+
+            },
+            update(){
+                console.log("update");
+            },
+            componentupdate(){
+                console.log("componentupdate");
+            },
+            unbind(){
+                console.log("unbind");
+            }
+        })
+
+        Vue.directive("drag",{
+            bind(el,binding){
+                console.log("+++++",binding);
+                let x=0;
+                let y=0;
+                let isDown=false;
+                Object.assign(el.style,{
+                    width:"100px",
+                    height:"100px",
+                    background:"red",
+                    position:"absolute"
+                })
+                el.addEventListener("mousedown",function(e){
+                    e.preventDefault()
+                    x=e.clientX-this.offsetLeft;
+                    y=e.clientY-this.offsetTop;
+                    isDown=true
+                })
+                el.addEventListener("mousemove",function(e){
+                    if(isDown){
+                       this.style.left=e.clientX-x+"px"
+                       this.style.top=e.clientY-y+"px"
+                    }
+                })
+                el.addEventListener("mouseup",function(e){
+                    
+                    isDown=false
+                })
+            }
+        })
+    
+        new Vue({
+            el:"#root",
+            data:{
+                number:1,
+                flag:true
+            },
+            directives:{
+                "test":{
+                    bind(el,binding){
+
+                    }
+                }
+            },
+            methods:{
+                handleClick:(value)=>{
+                    alert(value)
+                }
+            }
+        })
+       </script>
+</body>
+</html>

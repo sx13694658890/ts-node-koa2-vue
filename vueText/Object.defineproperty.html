@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        v-text  能填充整个 body 
+     -->
+    <div id="root">
+        <div>{{number}}</div>
+        <div v-for="(value,key,index) in user">{{value}}--{{key}}--{{index}}</div>
+        <div v-text="title"></div>
+        <div v-if="flag">{{title}}</div>
+        <div v-else>
+            aaaaaa
+        </div>
+        <div v-pre>
+             ......
+                    pre
+                    、、、、、、、
+        </div>
+        <div v-for="item of 3">{{ item}}</div>
+        <div :id="myid"><input type="text" v-model="nameuser"></div>
+        <div :class="{box:true}"></div>
+    </div>
+    <script type="text/javascript">
+        let obj1={
+            x:1,
+            y:2
+        }
+        function render(){
+            console.log("渲染");
+        }
+        function setState(state){
+            obj1=Object.assign(obj1,state)
+            render()
+        }
+        obj2=Object.assign({},obj1)
+        Object.defineProperty(obj1,"x",{
+            set(value){
+                obj2.x=value
+                render()
+            },
+            get(){
+                return obj2.x
+            }
+        })
+        obj1.x=2
+        function set(key,value){
+            Object.defineProperty(obj1,key,{
+            set(newvalue){
+                value=newvalue
+                render()
+            },
+            get(){
+                return value
+            }
+        })
+        }
+    </script>
+
+
+<script >
+   let app= new Vue({
+        el:"#root",
+        data:{
+            number:1,
+            title:'vue',
+            flag:false,
+            nameuser:"li",
+            myid:"place",
+            user:{
+                name:"xiaowang",
+              
+            }
+        },
+        watch:{
+            nameuser(){
+                console.log("ddddd")
+            }
+        }
+    })
+    app.number=2
+    app.$set(app.user,"name","王五")
+</script>
+<script>
+    let obj1={
+        x:1,
+        y:2
+    }
+    let obj2=new Proxy(obj1,{
+        set(){
+
+        },
+        get(){
+            
+        }
+    })
+</script>
+</body>
+</html>

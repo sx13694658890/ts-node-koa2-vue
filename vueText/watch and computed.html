@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./js/vue.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <div v-for="item of datalist" :key="item.id">{{item.username}}</div>
+        <hr>
+        <template  v-if="showUser.length>0">
+            <div  v-for="item of showUser" :key="item.id">{{item.username}}</div>
+        </template>
+        <input type="checkbox" :change.sync="checkAll">
+        
+        <item :id="222" :age="11">
+        <template  v-slot:hell="scope">
+            elcode=={{scope.number}}
+        </template>
+        </item>
+    </div>
+    <script>
+        Vue.component("item",{
+            inhertAttrs:false,// 禁用继承
+            model:{
+                prop:"checkvalue",
+                event:"click"
+            },
+            props:{
+                id:{
+                    type:Number,
+                    default:1
+                },
+                age:{
+                    type:Number,
+                    validator :function(value){
+                        console.log("++",value);
+                        return true
+                    }
+                }
+            },
+            data(){
+                return {
+                    title:'组件',
+                    num:11111
+                }
+            },
+            
+            methods:{
+                    change:()=>{
+                        this.$emit('update:change',this.value)
+                    }   
+            },
+            template:`
+                <div>
+                    客服用----{{title}}---{{id}}
+                    <div >
+                        <slot :number="num" name="hell"/>
+                        </div>
+                    <div :class="{
+                        'item-box':true
+                    }"></div>
+                  
+                 </div>
+            `
+        })
+        new Vue({
+        el:"#app",
+        data:{
+            datalist:[
+            {
+                id:1,
+                username:"小王"
+            },
+            {
+                id:2,
+                username:"admin"
+            }]
+            ,check:[],
+            
+            
+num:111
+        },
+        computed:{
+            showUser(){
+               let nelsit= this.datalist.filter(item=>item.id==2)
+               console.log(nelsit);
+               return nelsit
+            },
+            checkAll:{
+                get(){
+                    return true
+                },
+                set(newval){
+                    console.log(newval,"-----");
+                }
+            }
+        }
+    })
+    </script>
+</body>
+</html>
